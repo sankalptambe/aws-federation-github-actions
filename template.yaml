@@ -1,3 +1,5 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
 Parameters:
   GithubOrg: # can also be a regular user
     Type: String
@@ -11,7 +13,8 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: ExampleGithubRole
-      ManagedPolicyArns: [arn:aws:iam::aws:policy/ReadOnlyAccess]
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -20,15 +23,16 @@ Resources:
               Federated: !Ref GithubOidc
             Condition:
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${FullRepoName}:*
+                token.actions.githubusercontent.com:sub: !Sub "repo:${FullRepoName}:*"
 
   GithubOidc:
     Type: AWS::IAM::OIDCProvider
     Properties:
       Url: https://token.actions.githubusercontent.com
-      ThumbprintList: [a031c46782e6e6c662c2c87c76da9aa62ccabd8e]
+      ThumbprintList: 
+        - a031c46782e6e6c662c2c87c76da9aa62ccabd8e
       ClientIdList: 
-        - !Sub https://github.com/${GithubOrg}
+        - !Sub "https://github.com/${GithubOrg}"
 
 Outputs:
   Role:

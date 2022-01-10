@@ -1,3 +1,5 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
 Parameters:
   GithubOrg:
     Type: String
@@ -28,7 +30,7 @@ Resources:
     Properties:
       Url: https://token.actions.githubusercontent.com
       ThumbprintList:
-      - a031c46782e6e6c662c2c87c76da9aa62cc9f7k4
+      - a031c46782e6e6c662c2c87c76da9aa62ccabd8e
       ClientIdList:
       - Fn::Sub: https://github.com/${GithubOrg}
 Outputs:
