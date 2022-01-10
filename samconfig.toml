@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "pipeline-oidc-poc"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-u6x7a9ghy1to"
+s3_prefix = "pipeline-oidc-poc"
+region = "ap-south-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+parameter_overrides = "GithubOrg=\"sankalptambe\" FullRepoName=\"sankalptambe/aws-federation-github-actions\""
+image_repositories = []

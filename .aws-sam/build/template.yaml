@@ -1,0 +1,39 @@
+Parameters:
+  GithubOrg:
+    Type: String
+    Default: sankalptambe
+  FullRepoName:
+    Type: String
+    Default: sankalptambe/aws-federation-github-actions
+Resources:
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ExampleGithubRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: sts:AssumeRoleWithWebIdentity
+          Principal:
+            Federated:
+              Ref: GithubOidc
+          Condition:
+            StringLike:
+              token.actions.githubusercontent.com:sub:
+                Fn::Sub: repo:${FullRepoName}:*
+  GithubOidc:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ThumbprintList:
+      - a031c46782e6e6c662c2c87c76da9aa62cc9f7k4
+      ClientIdList:
+      - Fn::Sub: https://github.com/${GithubOrg}
+Outputs:
+  Role:
+    Value:
+      Fn::GetAtt:
+      - Role
+      - Arn
